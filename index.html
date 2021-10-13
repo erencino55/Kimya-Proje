@@ -46,6 +46,7 @@
 
             const molekül_isimler = ["11", "41","Benzen", "C2H2", "C2H4", "CH2O", "SO2", "bh3", "HO", "iyonik11","KarePiramit","ucgen cıftpıramıt","KareDuzlem"];
             const dropdown_names = ["Benzen", "C2H2", "C2H4", "CH2O", "SO2","KarePiramit","ucgen cıftpıramıt", "KareDuzlem"];
+            var loaded = []
             
             const düğmeler = [["H", " ", " ", " ", " ", " ", " ", "He"], ["Li", "Be", "B", "C", "N", "O", "F", "Ne"], ["Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar"]]
             const metalness =[[false, false, false, false, false, false, false, false], [true, true, true, false, false, false, false, false], [true, true, true, true, false, false, false, false]]
@@ -113,6 +114,8 @@
 
             function changeMol(molName) {
                 var molNow = moleküller[current_mol].molekül;
+                var i = molekül_isimler.indexOf(molName);
+                load_all(i);
                 if(molekül_isimler.includes(molName)){
                         current_mol = molekül_isimler.indexOf(molName);
                         console.log(moleküller);
@@ -252,21 +255,20 @@
             var ship_material = new THREE.MeshBasicMaterial( { color: 0x49ef4 } );
             let loader = new THREE.GLTFLoader();
 
-            function load_all(i, current_mol) {
-                let isim = molekül_isimler[i]
+            function load_all(i) {
+                let isim = molekül_isimler[i];
+                loaded.push(isim);
                 
                 loader.load(isim + ".gltf", function(gltf){
                 scene.add(gltf.scene)
 
-                
-                if (current_mol != i) {
-                    gltf.scene.traverse ( function (child) {
+                gltf.scene.traverse ( function (child) {
                     if (child instanceof THREE.Mesh) {
                         child.visible = false;
                         child.material.metalness = 0;
                     }
                 });
-                }
+                
 
                 molekül = gltf.scene
                 molekül.position.z = -8;
@@ -275,34 +277,21 @@
                 start_z = molekül.scale.z + 1;
                 moleküller[i] = new Moleküller(molekül, isim, start_x, start_y, start_z);
 
-                if (current_mol == i){
-                    selected_mol = molekül;
-                    hlight.target = selected_mol;
-                    stats = createStats();
-                    document.body.appendChild( stats.domElement );
-                    render();
-                    
-                }
+                hlight.target = molekül;
 
                 console.log(current_mol)
                 console.log(i)
-                if (i == molekül_isimler.length - 1) {
-                    gltf.scene.traverse ( function (child) {
-                    if (child instanceof THREE.Mesh) {
-                        child.material.metalness = 0;
-                    }
-                });
-
-                }
                 
 
             });
             }
             
-            for (let index = 0; index < molekül_isimler.length; index++) {
-                
-                load_all(index, current_mol)
-            }
+            stats = createStats();
+            document.body.appendChild( stats.domElement );
+            
+            load_all(current_mol);
+            render();
+            
             function createStats() {
                 var stats = new Stats();
                 stats.setMode(0);
