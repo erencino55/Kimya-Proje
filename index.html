@@ -40,12 +40,111 @@
             var WIDTH = window.innerWidth;
             var HEIGHT = window.innerHeight;
 
+            const molecule_images = {
+                "AlS":"Al2S3.png",
+                "LiP" :"Li3P.png",
+                "LiO": "Li2O.jpg",
+                "LiN": "Li3N.png",
+                "BeO" :"BeO.png",
+                "AlP":"AlP.png",
+                "NaP":"Na3P.png",
+                "MgCl":"MgCl2.png",
+                "MgS":"MgS.png",
+                "MgP":"Mg3P2.png",
+                "NaS":"Na2S.png",
+                "FMg":"MgF2.png",
+                "HMg": "MgH2.png",          
+                "HAl": "AlH3.png",
+                "BCl":"BCl3.png",
+                "OMg":"MgO.png",
+                "NMg":"Mg3N2.png",
+                "FNa":"NaF.png",
+                "FAl":"AlF3.png",
+                "ONa":"Na2O.png",
+                "OAl":"Al2O3.png",
+                "LiC": "Li4C.png",
+                "CNa":"Na4C.png",
+                "CMg":"Mg2C.png",
+                "CAl":"Al4C3.png",
+                "NAl":"AlN.png",
+                "NSi":"3Si4N.png",
+            }
+
+            const molecule_lookup = {
+                "HH" : "DuzAynı",
+                "HLi": "iyonik kristal",
+                "HBe": "doğrusal",
+                "HB" : "üçgen piramit",
+                "HC" : "dörtyüzlü",
+                "HN" : "üçgen piramit",
+                "HO" : "açısal",
+                "HF" : "doğrusal",
+                "HNa": "iyonik kristal",
+                "HSi": "dörtyüzlü",
+                "HP" : "üçgen piramit",
+                "HS" : "açısal",
+                "HCl": "doğrusal",
+                "LiF": "iyonik kristal",
+                "LiCl":"iyonik kristal",
+                "BeC" :"doğrusal",
+                "BeN" :"",
+                "BeF" :"doğrusal",
+                "BeP" :"",
+                "BeS" :"",
+                "BeCl" :"doğrusal",
+                "BB": "",
+                "BC": "",
+                "BN": "",
+                "BO": "",
+                "BF": "üçgen piramit",
+                "BP":"",
+                "BS":"",
+                "CC":"DuzAynı",
+                "CN":"C3N4",
+                "CO":"açısal",
+                "CF":"dörtyüzlü",
+                "CSi":"",
+                "CP":"",
+                "CS":"C2S4",
+                "CCl":"dörtyüzlü",
+                "NN":"DuzAynı",
+                "NO":"iki açısal",
+                "NF":"üçgen piramit",
+                "NNa":"Na3N",
+                "NP":"doğrusal",
+                "NS":"iki açısal",
+                "NCl":"üçgen piramit",
+                "OO":"DuzAynı",
+                "OF":"açısal",
+                "OSi":"açısal",
+                "OP":"iki açısal",
+                "OS":"açısal",
+                "OCl":"DuzAynı",
+                "FF": "DuzAynı",
+                "FSi":"dörtyüzlü",
+                "FP":"üçgen piramit",
+                "FS":"açısal",
+                "FCl":"doğrusal",
+                "NaCl":"iyonik kristal",
+                "AlCl":"üçgen piramit",
+                "SiP":"",
+                "SiS":"açısal",
+                "SiCl":"dörtyüzlü",
+                "PP":"DuzAynı",
+                "PS":"iki açısal",
+                "PCl":"üçgen piramit",
+                "SS":"DuzAynı",
+                "SCl":"açısal",
+                "ClCl":"DuzAynı"
+
+            }
+
             const normalColor = "#b1b1be";
             const highlightColor = "#FDFF47";
             var selected = [];
 
-            const molekül_isimler = ["11", "41","Benzen", "C2H2", "C2H4", "CH2O", "SO2", "bh3", "HO", "iyonik11","KarePiramit","ucgen cıftpıramıt","KareDuzlem"];
-            const dropdown_names = ["Benzen", "C2H2", "C2H4", "CH2O", "SO2","KarePiramit","ucgen cıftpıramıt", "KareDuzlem"];
+            const molekül_isimler = ["11", "41", "dörtyüzlü","Benzen", "C2S4",  "CH2O", "SO2", "iyonik kristal","KarePiramit","ucgen cıftpıramıt","KareDuzlem","C3N4","doğrusal","iki açısal","Na3N","açısal", "üçgen piramit"];
+            const dropdown_names = ["11", "41", "dörtyüzlü","Benzen", "C2S4",  "CH2O", "SO2", "iyonik kristal","KarePiramit","ucgen cıftpıramıt","KareDuzlem","C3N4","doğrusal","iki açısal","Na3N","açısal", "üçgen piramit"];
             
             const düğmeler = [["H", " ", " ", " ", " ", " ", " ", "He"], ["Li", "Be", "B", "C", "N", "O", "F", "Ne"], ["Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar"]]
             const metalness =[[false, false, false, false, false, false, false, false], [true, true, true, false, false, false, false, false], [true, true, true, true, false, false, false, false]]
@@ -134,18 +233,55 @@
 
                 e.preventDefault();
             }
-
-            function changeMol(molName) {
+            var imgormod = true;
+            function changeMol(molName, img) {
                 var molNow = moleküller[current_mol].molekül;
-                if(molekül_isimler.includes(molName)){
-                        current_mol = molekül_isimler.indexOf(molName);
-                        console.log(moleküller);
-                        var newMol = moleküller.find(x => x.isim === molName).molekül;
-                        molNow.traverse ( function (child) {
+                console.log("imagemod       imagemod");
+                console.log(imgormod);
+
+                if (imgormod){
+                    molNow.traverse ( function (child) {
                             if (child instanceof THREE.Mesh) {
                                 child.visible = false;
                             }
                         })
+                }else{
+                    scene.remove(window.sprite);
+                }
+
+                if (img) {
+                    if(molName != ""){
+                        
+                        console.log("pppp");
+                        console.log(molName);
+                        
+                        imgormod = false;
+                        var tex = new THREE.TextureLoader().load( molName , function ( map ) {
+                            var halfHeight = 20 / Math.tan( camera.fov/2 * Math.PI / 180 );
+                            var yscale = halfHeight * 2;
+                            var xscale = yscale * map.image.height / map.image.height ;
+                            console.log("ppppp");
+                            console.log(20 * map.image.height / map.image.height)
+
+                            var material = new THREE.SpriteMaterial( { map: map, color: 0xffffff } );
+                            window.sprite = new THREE.Sprite( material );
+                            window.sprite.material.transparent = true;
+                            window.sprite.material.opacity = 1;
+                            window.sprite.scale.set(12 * map.image.width / map.image.height, 12, 1);
+                            
+                            scene.add(window.sprite);
+                        } );
+
+                        
+                    }
+                }else{
+                    
+                    if(molekül_isimler.includes(molName)){
+                        imgormod = true;
+                        current_mol = molekül_isimler.indexOf(molName);
+                        console.log(moleküller);
+                        var newMol = moleküller.find(x => x.isim === molName).molekül;
+                        
                         newMol.traverse ( function (child) {
                             if (child instanceof THREE.Mesh) {
                                 child.visible = true;
@@ -157,6 +293,7 @@
                             render();
                         }       
                     }  
+                }
             }
 
             function favMol() {  
@@ -255,8 +392,11 @@
             let loader = new THREE.GLTFLoader();
 
             function load_all(i, current_mol) {
+                // gltf dosyalarını yükle
+
                 let isim = molekül_isimler[i]
-                
+
+
                 loader.load(isim + ".gltf", function(gltf){
                 scene.add(gltf.scene)
 
@@ -327,58 +467,7 @@
                 return x;
             }
 
-            function getMolName(Grup_1, Grup_2, Metal_1, Metal_2, name_1, name_2) {
-                var molName = "";
-                if (Grup_1 == 8 || Grup_2 == 8) {
-                    molName = "";
-                    return molName;
-                }
-                if (Metal_1 & Metal_2) {
-                    molName = "";
-                    return molName;
-                }
-                if (!Metal_1 & !Metal_2){
-                    if (name_1 == "H"){
-                        var yük_1 = 1;
-                    }else{
-                        var yük_1 = 8 - Grup_1;
-                    }
-                    if (name_2 == "H"){
-                        var yük_2 = 1;
-                    }else{
-                        var yük_2 = 8 - Grup_2;
-                    }
-                    
-                    var ebob = gcd_two_numbers(yük_1, yük_2);
-                    yük_1 = yük_1 / ebob;
-                    yük_2 = yük_2 / ebob;
-                    if ( yük_1 > yük_2){
-                        molName = yük_1.toString() + yük_2.toString();
-                    }else{
-                        molName = yük_2.toString() + yük_1.toString();
-                    }
-                    return molName;
-                }
-                if (Metal_1 || Metal_2){
-                    if (Metal_1){
-                        var yük_1 = Grup_1;
-                        var yük_2 = 8 - Grup_2;
-                    }else{
-                        var yük_1 = 8 - Grup_1;
-                        var yük_2 = Grup_2;
-                    }
-                    var ebob = gcd_two_numbers(yük_1, yük_2);
-                    yük_1 = yük_1 / ebob;
-                    yük_2 = yük_2 / ebob;
-                    if ( yük_1 > yük_2){
-                        molName = "iyonik" + yük_1.toString() + yük_2.toString();
-                    }else{
-                        molName = "iyonik" + yük_2.toString() + yük_1.toString();
-                    }
-                    return molName;
-                }
-                
-            }
+            
 
             var t = 0;
             var camera = new THREE.PerspectiveCamera(70, WIDTH/HEIGHT);
@@ -415,26 +504,34 @@
                 }
                 console.log("hola");
                 if (selected.length == 1) {
-                    console.log(selected[0]);
-                    console.log(document.getElementById(selected[0]).closest('tr').rowIndex + 1)
-                    console.log(document.getElementById(selected[0]).closest('td').cellIndex + 1)
-                    console.log(metalness[document.getElementById(selected[0]).closest('tr').rowIndex][document.getElementById(selected[0]).closest('td').cellIndex])
-
-                    console.log(event.target.id);
-                    console.log(event.target.closest('tr').rowIndex + 1)
-                    console.log(event.target.closest('td').cellIndex + 1)
-                    console.log(metalness[event.target.closest('tr').rowIndex][event.target.closest('td').cellIndex])
 
                     if(molekül_isimler.includes(selected[0]+event.target.id)){
-                        var molName = selected[0]+event.target.id;
+                        //var molName = selected[0]+event.target.id;
                     }else if(molekül_isimler.includes(event.target.id+selected[0])){
-                        var molName = event.target.id+selected[0];
+                        //var molName = event.target.id+selected[0];
                     }else{
-                        var molName = getMolName(document.getElementById(selected[0]).closest('td').cellIndex + 1, event.target.closest('td').cellIndex + 1, metalness[document.getElementById(selected[0]).closest('tr').rowIndex][document.getElementById(selected[0]).closest('td').cellIndex], metalness[event.target.closest('tr').rowIndex][event.target.closest('td').cellIndex], selected[0], event.target.id)
+                        //var molName = getMolName(document.getElementById(selected[0]).closest('td').cellIndex + 1, event.target.closest('td').cellIndex + 1, metalness[document.getElementById(selected[0]).closest('tr').rowIndex][document.getElementById(selected[0]).closest('td').cellIndex], metalness[event.target.closest('tr').rowIndex][event.target.closest('td').cellIndex], selected[0], event.target.id)
                     
                     }
+
+                    var isimg = false;
+
+                    if(selected[0]+event.target.id in molecule_lookup){
+                        molName = molecule_lookup[selected[0]+event.target.id];
+                    }else if(event.target.id+selected[0] in molecule_lookup){
+                        molName = molecule_lookup[event.target.id+selected[0]];
+                    }else if(selected[0]+event.target.id in molecule_images){
+                        molName = molecule_images[selected[0]+event.target.id];
+                        isimg = true;
+                    }else if(event.target.id+selected[0] in molecule_images){
+                        molName = molecule_images[event.target.id+selected[0]];
+                        isimg = true;
+                    }
+                    else{
+                        molName = "";
+                    }
                     console.log(molName);
-                    changeMol(molName);
+                    changeMol(molName, isimg);
                     
                 }else if(selected.length == 2){
 

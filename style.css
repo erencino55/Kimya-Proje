@@ -7,7 +7,13 @@ body {
     position: relative;
 }
 
-button { color: #001131; background: #b1b1be; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.9);}
+button { display:block;
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  border: 1px solid red;}
+
+
 
 canvas{
     position: absolute;
