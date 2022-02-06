@@ -7,13 +7,11 @@ body {
     position: relative;
 }
 
-button { display:block;
-  height: 300px;
-  width: 300px;
-  border-radius: 50%;
-  border: 1px solid red;}
-
-
+button { width: 200px;
+  height: 200px;
+  outline-style:initial;
+  border-radius: 100px;
+  cursor: pointer;}
 
 canvas{
     position: absolute;
