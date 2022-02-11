@@ -9,12 +9,21 @@
     <script src="stats.min.js"></script>
     <div id="world">
         <canvas id="molecule"></canvas>
-        <div id="container">
-            <table width="50%" height="200px" cellspacing="0" cellpadding="0" id="MolTable">
-                <tbody>
-                    
-                </tbody>
-            </table>
+        <div id="main">
+            
+            <div id="container">
+                <table width="50%" height="200px" cellspacing="0" cellpadding="0" id="MolTable">
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <div id ="btn2", style="height: 60px; width: 150px;">
+                <button id = "gndr" style="height: 60px; width: 150px;">Gönder</button>
+            </div>
+            <div id = "btn1", style="height: 60px; width: 150px;">
+                <button id = "quiz" style="height: 60px; width: 150px;">Quiz</button>
+            </div>
         </div>
         <div id = "dropdown">
             <form>  
@@ -39,6 +48,8 @@
         <script>
             var WIDTH = window.innerWidth;
             var HEIGHT = window.innerHeight;
+            document.getElementById("gndr").addEventListener("click", (event) => {var ext = ".gltf"; var nm = molName; if (imgormod) {ext = ".gltf"} else{ext = ".png"} location.href = "https://ucboyuttakimya.com/molekul/?molname=" + molName + "&path=" + molName + ".txt" + "&mol=" + molName + ext});
+            document.getElementById("quiz").addEventListener("click", (event) => {location.href = "https://ucboyuttakimya.com/quiz"});
 
             const molecule_images = {
                 "AlS":"Al2S3.png",
@@ -74,7 +85,7 @@
                 "HH" : "DuzAynı",
                 "HLi": "iyonik kristal",
                 "HBe": "doğrusal",
-                "HB" : "üçgen piramit",
+                "HB" : "bh3",
                 "HC" : "dörtyüzlü",
                 "HN" : "üçgen piramit",
                 "HO" : "açısal",
@@ -139,12 +150,12 @@
 
             }
 
-            const normalColor = "#ccc";
+            const normalColor = "#b1b1be";
             const highlightColor = "#FDFF47";
             var selected = [];
 
-            const molekül_isimler = ["11", "41", "dörtyüzlü","Benzen", "C2S4",  "CH2O", "SO2", "iyonik kristal","KarePiramit","ucgen cıftpıramıt","KareDuzlem","C3N4","doğrusal","iki açısal","Na3N","açısal", "üçgen piramit"];
-            const dropdown_names = ["11", "41", "dörtyüzlü","Benzen", "C2S4",  "CH2O", "SO2", "iyonik kristal","KarePiramit","ucgen cıftpıramıt","KareDuzlem","C3N4","doğrusal","iki açısal","Na3N","açısal", "üçgen piramit"];
+            const molekül_isimler = ["bh3","11", "41", "dörtyüzlü","Benzen", "C2S4",  "CH2O", "SO2", "iyonik kristal","KarePiramit","ucgen cıftpıramıt","KareDuzlem","C3N4","doğrusal","iki açısal","Na3N","açısal", "üçgen piramit"];
+            const dropdown_names = ["bh3", "11", "41", "dörtyüzlü","Benzen", "C2S4",  "CH2O", "SO2", "iyonik kristal","KarePiramit","ucgen cıftpıramıt","KareDuzlem","C3N4","doğrusal","iki açısal","Na3N","açısal", "üçgen piramit"];
             
             const düğmeler = [["H", " ", " ", " ", " ", " ", " ", "He"], ["Li", "Be", "B", "C", "N", "O", "F", "Ne"], ["Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar"]]
             const metalness =[[false, false, false, false, false, false, false, false], [true, true, true, false, false, false, false, false], [true, true, true, true, false, false, false, false]]
